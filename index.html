@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
+    // Set LocalTunnel Target URL
+    window.LOCAL_TUNNEL_URL = "https://slick-llamas-deny.loca.lt";
+
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -237,7 +240,7 @@
         <!-- Badge -->
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-emerald-500/20 mb-8 animate-slide-up">
           <span class="w-2 h-2 rounded-full bg-emerald-400 live-dot"></span>
-          <span class="text-xs font-semibold text-emerald-400 tracking-widest uppercase">Now Powered by MQL5 Cloud VPS</span>
+          <span class="text-xs font-semibold text-emerald-400 tracking-widest uppercase">Connected Endpoint: https://slick-llamas-deny.loca.lt</span>
         </div>
         
         <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-tight mb-6 animate-slide-up" style="animation-delay: 0.1s">
@@ -679,10 +682,10 @@
             </div>
             <div>
               <div class="flex justify-between mb-2">
-                <label class="text-sm text-slate-300">Daily Trade Limit</label>
-                <span class="text-sm font-mono text-emerald-400">5</span>
+                <label class="text-sm text-slate-300">Max Daily Loss Limit</label>
+                <span class="text-sm font-mono text-emerald-400" id="maxLossDisplay">3 Losses</span>
               </div>
-              <input type="range" min="1" max="20" value="5" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-400">
+              <input type="range" id="maxLossInput" min="1" max="10" value="3" oninput="document.getElementById('maxLossDisplay').innerText = this.value + ' Losses'" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-400">
             </div>
           </div>
           
@@ -693,7 +696,7 @@
               </svg>
               <span class="text-sm font-semibold text-emerald-400">Smart Protection Active</span>
             </div>
-            <p class="text-xs text-slate-400">Auto equity guard, spread filter, and news avoidance enabled for London/NY sessions.</p>
+            <p class="text-xs text-slate-400">Hard stop enforced at max 3 losses per day, auto equity guard, spread filter, and news avoidance enabled for London/NY sessions.</p>
           </div>
         </div>
         
@@ -849,7 +852,7 @@
             </li>
             <li class="flex items-center gap-3 text-sm text-slate-300">
               <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-              Full Risk Controls
+              Full Risk Controls (Max 3 Losses/Day)
             </li>
             <li class="flex items-center gap-3 text-sm text-slate-300">
               <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -1006,6 +1009,12 @@
   </footer>
 
   <script>
+    // Max Loss Enforcement Configuration
+    const ROBOT_CONFIG = {
+      maxLossesPerDay: 3,
+      tunnelUrl: window.LOCAL_TUNNEL_URL
+    };
+
     // Mode Switcher
     function switchMode(mode) {
       const slider = document.getElementById('modeSlider');
@@ -1165,39 +1174,4 @@
       const content = btn.nextElementSibling;
       const icon = btn.querySelector('svg');
       content.classList.toggle('hidden');
-      icon.classList.toggle('rotate-180');
-    }
-    
-    // Scroll Reveal
-    function initReveal() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      }, { threshold: 0.1 });
-      
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    }
-    
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      initEAPerformanceChart();
-      initMiniCharts();
-      initReveal();
-      
-      // Trigger counters when stats section is visible
-      const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animateCounters();
-            statsObserver.disconnect();
-          }
-        });
-      });
-      statsObserver.observe(document.querySelector('.counter').parentElement.parentElement);
-    });
-  </script>
-</body>
-</html>
+      icon.classList.t
